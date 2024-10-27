@@ -2,19 +2,40 @@ import pandas as pd
 import numpy as np
 import openpyxl
 import logging
+import warnings
+
+warnings.filterwarnings('ignore', category=UserWarning, module='openpyxl')
+
+file_path = "../../data/raw/bulk.xlsx"
 
 
-# Define the file path with a different name
-file_path = "../data/raw/bulk.xlsx"
+def read_search_terms(file_path, sheet_name="SP Search Term Report"):
+    """
+    Extract Search terms for campaing
+    """
+    try:
+        df = pd.read_excel(file_path, sheet_name=sheet_name)
+        logging.info(f"Succefully read search data from { file_path }")
+        return df
+    except Exception as e:
+        logging.error(f"Could read the file {str(e)}")
+        raise
 
 
-# Define the function for Search Terms
-def exract_data(file_path, sheet_name="SP Search Term Report"):
-    xls = pd.read_excel(file_path, sheet_name=sheet_name)
-    return xls
+def main():
+    try:
+        file_path = "../../data/raw/bulk.xlsx"
+        search_terms = read_search_terms(file_path)
+        return search_terms
+
+    except Exception as e:
+        logging.error(f"Extraction process failed {str(e)}")
+    raise
 
 
-# Call the function with the file path
-extracted = exract_data(file_path)
 
+
+if __name__ == '__main__':
+    test = main()
+    print(test)
 
