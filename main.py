@@ -1,16 +1,24 @@
 import pandas as pd
 import numpy as np
 import openpyxl
-from src.extract.extract_data import extracted
+import logging
+from src.extract.extract_data import read_search_terms
+from src.transform.transform_data import transform_search_keywords
 
 
 def run_etl():
-    return extracted()
+    file_path = "data/raw/bulk.xlsx"
+    raw_data = read_search_terms(file_path)
+    transformed_data = transform_search_keywords(raw_data)
+
+    print(transformed_data)
 
 
 
 
-# Press the green button in the gutter to run the script.
+
+
 if __name__ == '__main__':
     run_etl()
+
 
