@@ -12,7 +12,7 @@ def transform_search_keywords(keywords):
     """
     try:
         keywords.columns = keywords.columns.str.replace(' ', '_')
-        set_dash = keywords.loc[(keywords['Clicks'] >= 10) & (keywords["Orders"] == 0) &
+        set_dash = keywords.loc[(keywords['Clicks'] >= 17) & (keywords["Orders"] == 0) &
                                 (~keywords['Customer_Search_Term'].str.contains('b0'))]
         logging.info(f"Successfully transformed data from {keywords}")
         return set_dash
