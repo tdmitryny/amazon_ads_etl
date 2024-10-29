@@ -11,9 +11,9 @@ def run_etl():
     file_path = "data/raw/bulk.xlsx"
     raw_data = read_search_terms(file_path)
     transformed_data = transform_search_keywords(raw_data)
-    newe_date = load_data(transformed_data)
+    new_date = load_data(transformed_data)
 
-    return newe_date
+    return new_date
 
 
 

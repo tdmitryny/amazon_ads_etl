@@ -36,7 +36,6 @@ def load_data(data):
 
 
 
-
     # Drop duplicate rows based on 'Keyword_Text' if needed
     df1 = df1.drop_duplicates(subset=["Keyword_Text"])
 
@@ -44,8 +43,6 @@ def load_data(data):
         df1[column] = value
 
     df1.columns = df1.columns.str.replace("_", " ")
-
-
 
 
     # Creating path to folder
@@ -58,11 +55,13 @@ def load_data(data):
 
 
     while os.path.exists(file_path):
-        file_name = f"search-negative-{current_date}-{counter}.xlsx"
+        file_name = f"search-negative-{current_date}-v{counter}.xlsx"
         file_path = os.path.join(folder_path, file_name)
         counter += 1
 
     with pd.ExcelWriter(file_path) as writer:
         df1.to_excel(writer, sheet_name="negative-search", index=False)
+
+
 
 
