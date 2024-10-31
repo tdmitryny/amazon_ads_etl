@@ -3,18 +3,16 @@ import numpy as np
 import openpyxl
 import logging
 import warnings
-from data.new_sheet import new_data
+from data.asin_sheet import asin_data
 from datetime import datetime
 import os
 
 
-# DONT FORGET TO USE TRY
-
-def load_data(data):
+def load_data_asin(data):
     """Create new DataFrame file with loaded negative keywords"""
     # Define the column mappings and values to assign
 
-    df1 = pd.DataFrame(columns=new_data)
+    df1 = pd.DataFrame(columns=asin_data)
     df1.columns = df1.columns.str.replace(" ", "_")
 
     column_mappings = {
@@ -27,7 +25,7 @@ def load_data(data):
         "Product_Targeting_ID": data["Product_Targeting_ID"],
         "Campaign_Name_(Informational_only)": data["Campaign_Name_(Informational_only)"],
         "State": "enabled",
-        "Keyword_Text": data["Customer_Search_Term"],  # remove dublication
+        "Keyword_Text": data['Customer_Search_Term'].apply(lambda x: f'asin="{x.upper()}"'),
         "Match_Type": "Negative Exact",
         "Product_Targeting_Expression": data["Product_Targeting_Expression"],
         "Clicks": data["Clicks"].astype('int'),
@@ -45,13 +43,13 @@ def load_data(data):
     # Creating path to folder
     counter = 1
     current_date = datetime.now().strftime("%m-%d")
-    folder_path = "data/processed/keywords"
+    folder_path = "data/processed/asins"
     os.makedirs(folder_path, exist_ok=True)
-    file_name = f"search-negative-{current_date}.xlsx"
+    file_name = f"search-negative-asin-{current_date}.xlsx"
     file_path = os.path.join(folder_path, file_name)
 
     while os.path.exists(file_path):
-        file_name = f"search-negative-{current_date}-v{counter}.xlsx"
+        file_name = f"search-negative-asin-{current_date}-v{counter}.xlsx"
         file_path = os.path.join(folder_path, file_name)
         counter += 1
 
