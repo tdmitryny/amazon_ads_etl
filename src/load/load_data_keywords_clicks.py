@@ -8,7 +8,7 @@ from datetime import datetime
 import os
 
 
-def load_data_asin(data):
+def load_data_keywords_orders(data):
     """Create new DataFrame file with loaded negative keywords"""
     # Define the column mappings and values to assign
     try:
@@ -18,19 +18,20 @@ def load_data_asin(data):
 
         column_mappings = {
             "Product": data["Product"],
-            "Entity": "Negative Product Targeting",
+            "Entity": "Negative Keyword",
             "Operation": "Create",
             "Campaign_ID": data["Campaign_ID"],
             "Ad_Group_ID": data["Ad_Group_ID"],
             "Keyword_ID": data["Keyword_ID"],
             "Product_Targeting_ID": data["Product_Targeting_ID"],
             "Campaign_Name_(Informational_only)": data["Campaign_Name_(Informational_only)"],
-            "Ad_Group_Name_(Informational_only)": data["Ad_Group_Name_(Informational_only)"],
             "State": "enabled",
-            "Product_Targeting_Expression": data['Customer_Search_Term'].apply(lambda x: f'asin="{x.upper()}"'),
+            "Keyword_Text": data["Customer_Search_Term"],  # remove dublication
+            "Match_Type": "Negative Exact",
+            "Product_Targeting_Expression": data["Product_Targeting_Expression"],
             "Clicks": data["Clicks"].astype('int'),
             "Orders": data["Orders"],
-            "ACOS": data["ACOS"]
+            "ACOS": data["ACOS"].apply(lambda x: f"{round(x * 100, 2)}%")
         }
 
         # Drop duplicate rows based on 'Keyword_Text' if needed
@@ -44,13 +45,13 @@ def load_data_asin(data):
         # Creating path to folder
         counter = 1
         current_date = datetime.now().strftime("%m-%d")
-        folder_path = "data/processed/asins"
+        folder_path = "data/processed/keywords"
         os.makedirs(folder_path, exist_ok=True)
-        file_name = f"search-negative-asin-{current_date}.xlsx"
+        file_name = f"search-negative-keywords-orders-{current_date}.xlsx"
         file_path = os.path.join(folder_path, file_name)
 
         while os.path.exists(file_path):
-            file_name = f"search-negative-asin-{current_date}-v{counter}.xlsx"
+            file_name = f"search-negative-keywords-orders-{current_date}-v{counter}.xlsx"
             file_path = os.path.join(folder_path, file_name)
             counter += 1
 

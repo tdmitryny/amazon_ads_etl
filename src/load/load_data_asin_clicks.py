@@ -8,7 +8,7 @@ from datetime import datetime
 import os
 
 
-def load_data_asin(data):
+def load_data_asin_orders(data):
     """Create new DataFrame file with loaded negative keywords"""
     # Define the column mappings and values to assign
     try:
@@ -46,11 +46,11 @@ def load_data_asin(data):
         current_date = datetime.now().strftime("%m-%d")
         folder_path = "data/processed/asins"
         os.makedirs(folder_path, exist_ok=True)
-        file_name = f"search-negative-asin-{current_date}.xlsx"
+        file_name = f"search-negative-asin-orders-{current_date}.xlsx"
         file_path = os.path.join(folder_path, file_name)
 
         while os.path.exists(file_path):
-            file_name = f"search-negative-asin-{current_date}-v{counter}.xlsx"
+            file_name = f"search-negative-asin-orders-{current_date}-v{counter}.xlsx"
             file_path = os.path.join(folder_path, file_name)
             counter += 1
 
