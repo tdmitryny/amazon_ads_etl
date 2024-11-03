@@ -28,12 +28,12 @@ def load_data(data):
             "Product_Targeting_ID": data["Product_Targeting_ID"],
             "Campaign_Name_(Informational_only)": data["Campaign_Name_(Informational_only)"],
             "State": "enabled",
-            "Keyword_Text": data["Customer_Search_Term"],  # remove dublication
+            "Keyword_Text": data["Customer_Search_Term"],
             "Match_Type": "Negative Exact",
             "Product_Targeting_Expression": data["Product_Targeting_Expression"],
             "Clicks": data["Clicks"].astype('int'),
             "Orders": data["Orders"],
-            "ACOS": data["ACOS"]
+            "ACOS": data["ACOS"].apply(lambda x: f"{round(x * 100, 2)}%")
         }
 
         # Drop duplicate rows based on 'Keyword_Text' if needed

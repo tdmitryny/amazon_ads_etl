@@ -7,7 +7,9 @@ from src.extract.extract_data import read_search_terms
 from src.transform.transform_data import transform_search_keywords
 from src.transform.transform_asin import transform_search_asins
 from src.transform.transform_asin_clicks import transform_search_asins_orders
+from src.transform.transform_add_keywords import transform_add_keywords
 from src.transform.transform_data_keywords import transform_search_keywords_orders
+from src.load.load_add_keywords import load_data_keywords
 from src.load.load_data_keywords_clicks import load_data_keywords_orders
 from src.load.load_data_asin_clicks import load_data_asin_orders
 from src.load.load_data_asin import load_data_asin
@@ -45,9 +47,11 @@ def run_etl():
     keywords_clicks = transform_search_keywords_orders(raw_data)
     keyword_data_clicks = load_data_keywords_orders(keywords_clicks)
 
+    # Add new keywords
+    adding_transform_keywords = transform_add_keywords(raw_data)
+    adding_keywords = load_data_keywords(adding_transform_keywords)
 
-
-    return keyword_data, asins_data, asins_data_clicks, keyword_data_clicks
+    return keyword_data, asins_data, asins_data_clicks, keyword_data_clicks, adding_keywords
 
 
 if __name__ == '__main__':

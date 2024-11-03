@@ -3,31 +3,35 @@ import numpy as np
 import openpyxl
 import logging
 import warnings
-from data.asin_sheet import asin_data
+from data.new_sheet import new_data
 from datetime import datetime
 import os
 
 
-def load_data_asin_orders(data):
+# DONT FORGET TO USE TRY
+
+def load_data_keywords(data):
     """Create new DataFrame file with loaded negative keywords"""
     # Define the column mappings and values to assign
     try:
-        logging.info("Getting ASINS data")
-        df1 = pd.DataFrame(columns=asin_data)
+
+        df1 = pd.DataFrame(columns=new_data)
         df1.columns = df1.columns.str.replace(" ", "_")
 
         column_mappings = {
             "Product": data["Product"],
-            "Entity": "Negative Product Targeting",
+            "Entity": "Keyword",
             "Operation": "Create",
             "Campaign_ID": data["Campaign_ID"],
             "Ad_Group_ID": data["Ad_Group_ID"],
             "Keyword_ID": data["Keyword_ID"],
-            "Product_Targeting_ID": data["Product_Targeting_ID"],
+            "Targeting_Type": "Manual",
             "Campaign_Name_(Informational_only)": data["Campaign_Name_(Informational_only)"],
-            "Ad_Group_Name_(Informational_only)": data["Ad_Group_Name_(Informational_only)"],
             "State": "enabled",
-            "Product_Targeting_Expression": data['Customer_Search_Term'].apply(lambda x: f'asin="{x.upper()}"'),
+            "Bid": 0.31,
+            "Keyword_Text": data["Customer_Search_Term"],
+            "Match_Type": "Broad",
+            "Product_Targeting_Expression": data["Product_Targeting_Expression"],
             "Clicks": data["Clicks"].astype('int'),
             "Orders": data["Orders"],
             "ACOS": data["ACOS"].apply(lambda x: f"{round(x * 100, 2)}%")
@@ -41,23 +45,24 @@ def load_data_asin_orders(data):
 
         df1.columns = df1.columns.str.replace("_", " ")
 
+        logging.info(f"Successfully transformed data search terms")
+
         # Creating path to folder
         counter = 1
         current_date = datetime.now().strftime("%m-%d")
-        folder_path = "data/processed/asins"
+        folder_path = "data/processed/add_keywords"
         os.makedirs(folder_path, exist_ok=True)
-        file_name = f"search-negative-asin-orders-{current_date}.xlsx"
+        file_name = f"keywords-{current_date}.xlsx"
         file_path = os.path.join(folder_path, file_name)
 
         while os.path.exists(file_path):
-            file_name = f"search-negative-asin-orders-{current_date}-v{counter}.xlsx"
+            file_name = f"keywords-{current_date}-v{counter}.xlsx"
             file_path = os.path.join(folder_path, file_name)
             counter += 1
 
         with pd.ExcelWriter(file_path) as writer:
-            df1.to_excel(writer, sheet_name="negative-search", index=False)
-
-        logging.info("Successfully received ASINS data")
+            df1.to_excel(writer, sheet_name="keywords", index=False)
+        logging.info("Search Terms added to Keywords")
     except Exception as e:
         logging.error(f"Couldn't transform the file {str(e)}")
         raise
