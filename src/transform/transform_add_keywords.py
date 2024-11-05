@@ -6,7 +6,7 @@ import warnings
 import asyncio
 
 
-def transform_add_keywords(keywordss):
+def transform_add_keywords(keywords):
     """
     Adding customer search keywords to negative list without ASINS
     and returning new Excel file
